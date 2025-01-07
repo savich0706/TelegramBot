@@ -3,7 +3,7 @@ from aiogram.filters import Command
 from aiogram.types import Message
 
 
-TOKEN = '7967376653:AAFNc3mZmNM7IXYm2-4S6dNjuRtP4q_LsWs'
+TOKEN = ''
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
