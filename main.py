@@ -1,37 +1,25 @@
-from aiogram import Bot, Dispatcher, F
-from aiogram.filters import Command
-from aiogram.types import Message
+import asyncio
+
+from aiogram import Bot, Dispatcher
+from configuration.config import Config, load_config
+from handlers import user_handlers, other_hendlers
 
 
-TOKEN = '7967376653:AAFNc3mZmNM7IXYm2-4S6dNjuRtP4q_LsWs'
-
-bot = Bot(token=TOKEN)
-dp = Dispatcher()
-
-@dp.message(Command(commands=['start']))
-async def start_command(message: Message):
-    await message.answer('Привет, я Бот, напиши что нибудь!')
+async def main():
+    # Загружаем конфиг в переменную
+    config: Config = load_config()
     
-
-@dp.message(Command(commands=['help']))
-async def help_command(message: Message):
-    await message.answer('Вы выбрали помощь')
-
-
-@dp.message()
-async def all_message(message: Message):
-    try:
-        await message.send_copy(chat_id=message.chat.id)
-    except:
-        await message.reply(text='Данный тип апдейтов не поддерживается')
+    # инициализируем бот и диспетчер
+    bot = Bot(token=config.tg_bot.token)
+    dp = Dispatcher()
     
+    # подключаем роутеры к диспетчеру
+    dp.include_routers(user_handlers.router, other_hendlers.router)
     
-    
-@dp.message(F.photo)
-async def process_photo_message(message: Message):
-    await message.reply_photo(message.photo[-1].file_id, caption='Это Ваше фото')
-  
+    # Пропускаем накопившиеся апдейты и запускаем полинг
+    await bot.delete_webhook(drop_pending_updates=True)
+    await dp.start_polling(bot)
 
-if __name__ == '__main__':
-    dp.run_polling(bot)
+
+asyncio.run(main())
 
