@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router, Bot, F
 from aiogram.types import Message, ReplyKeyboardRemove
 from aiogram.filters import Command, CommandStart
 from lexicon.lexicon import LEXICON_RU
@@ -27,3 +27,10 @@ async def process_web_app_command(message: Message):
         text='Экспериментируем со специальными кнопками',
         reply_markup=web_app_keyboard
     )
+    
+# Хендлер удаляет меню у бота
+@router.message(Command(commands='delmenu'))
+async def delete_menu(message: Message, bot: Bot):
+    await bot.delete_my_commands()
+    await message.answer(text='Кнопка удалена')
+    

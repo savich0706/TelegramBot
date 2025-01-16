@@ -4,6 +4,8 @@ from aiogram import Bot, Dispatcher
 from configuration.config import Config, load_config
 from handlers import user_handlers, other_hendlers
 
+from keyboards.menu import set_menu
+
 
 async def main():
     # Загружаем конфиг в переменную
@@ -15,6 +17,12 @@ async def main():
     
     # подключаем роутеры к диспетчеру
     dp.include_routers(user_handlers.router, other_hendlers.router)
+    
+    # делаем bot доступным в других модулях при передаче в качестве аргумента 
+    dp['bot'] = bot
+    
+    # устанавливаем кнопку меню боту
+    await set_menu(bot=bot)
     
     # Пропускаем накопившиеся апдейты и запускаем полинг
     await bot.delete_webhook(drop_pending_updates=True)

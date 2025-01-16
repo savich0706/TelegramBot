@@ -6,3 +6,8 @@ LEXICON_RU: dict[str, str] = {
     'no_echo': 'Данный тип апдейтов не поддерживается '
                'методом send_copy'
 }
+
+LEXICON_MENU: dict[str, str] = {'/command1': 'command1 description',
+                                '/command2': 'command2 description',
+                                '/command3': 'command3 description',
+                                '/command4': 'command4 description'}
